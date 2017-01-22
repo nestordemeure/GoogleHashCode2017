@@ -1,4 +1,4 @@
-module GHC.Extensions
+namespace GHC.Extensions
 
 //open System.Collections.Generic // for Dictionary
 //open FSharp.Collections.ParallelSeq // for PSeq
@@ -7,8 +7,9 @@ module GHC.Extensions
 //-------------------------------------------------------------------------------------------------
 // FUNCTIONS
 
-/// unit pipe
-let inline (|->) x f = f x ; x
+module Common =
+    /// unit pipe
+    let inline (|->) x f = f x ; x
 
 //-------------------------------------------------------------------------------------------------
 // Array
