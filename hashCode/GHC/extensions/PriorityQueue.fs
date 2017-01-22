@@ -4,6 +4,7 @@ namespace GHC.Extensions
 // PRIORITY QUEUE 
 
 // adapted from : http://rosettacode.org/wiki/Priority_queue#F.23
+/// Priority Queue
 [<RequireQualifiedAccess>]
 module PriorityQueue =
   type HeapEntry<'K,'V> = struct val k:'K val v:'V new(k,v) = {k=k;v=v} end
@@ -86,16 +87,6 @@ module PriorityQueue =
                                    siftdown nk nv (adj ll) (adj rr)
         adj pq
  
-  let fromSeq sq = 
-    if Seq.isEmpty sq then Mt
-    else let nmrtr = sq.GetEnumerator()
-         let rec build lvl = if lvl = 0 || not (nmrtr.MoveNext()) then Mt
-                             else let ck, cv = nmrtr.Current
-                                  let lft = lvl >>> 1
-                                  let rght = (lvl - 1) >>> 1
-                                  siftdown ck cv (build lft) (build rght)
-         build (sq |> Seq.length)
- 
   let merge (pq1:PriorityQueue<_,_>) (pq2:PriorityQueue<_,_>) = // merges without using a sequence
     match pq1 with
       | Mt -> pq2
@@ -139,8 +130,9 @@ module PriorityQueue =
 // MUTABLE PRIORITY QUEUE 
 
 // adapted from : http://rosettacode.org/wiki/Priority_queue#F.23
+/// change-in-place priority queue, quicker if you can use them
 [<RequireQualifiedAccess>]
-module MutablePriorityQueue =
+module MPriorityQueue =
   type HeapEntry<'K,'V> = struct val k:'K val v:'V new(k,v) = { k=k;v=v } end
   /// a priority queue that is changed in place, more efficient than its functionnal counterpart
   type MutablePriorityQueue<'K,'V> = ResizeArray<HeapEntry<'K,'V>>

@@ -46,9 +46,9 @@
     <Compile Include="extensions/Extensions.fs" />
     <Compile Include="extensions/PriorityQueue.fs" />
     <Compile Include="Domain.fs" />
-    <Compile Include="Import.fs" />
-    <Compile Include="Solve.fs" />
-    <Compile Include="Export.fs" />
+    <Compile Include="importExport/Import.fs" />
+    <Compile Include="solutions/Solve.fs" />
+    <Compile Include="importExport/Export.fs" />
     <Compile Include="GHC.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />

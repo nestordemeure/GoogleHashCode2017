@@ -1,6 +1,7 @@
 module GHC.Extensions
 
 //open System.Collections.Generic
+//open FSharp.Collections.ParallelSeq
 
 //-------------------------------------------------------------------------------------------------
 // FUNCTIONS
