@@ -1,7 +1,8 @@
 module GHC.Extensions
 
-//open System.Collections.Generic
-//open FSharp.Collections.ParallelSeq
+//open System.Collections.Generic // for Dictionary
+//open FSharp.Collections.ParallelSeq // for PSeq
+//open System.Threading.Tasks // for Parallel.ForEach(data, action) |> ignore
 
 //-------------------------------------------------------------------------------------------------
 // FUNCTIONS

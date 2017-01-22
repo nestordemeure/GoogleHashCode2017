@@ -1,10 +1,10 @@
 module GHC.Import
 
 open FSharpx.Collections
+open System.IO
+
 open GHC.Extensions
 open GHC.Domain
-
-open System.IO
 
 //-------------------------------------------------------------------------------------------------
 
@@ -13,3 +13,6 @@ open System.IO
 //-------------------------------------------------------------------------------------------------
 // IMPORT
 
+let import path =
+   // File.ReadLines(path)
+   File.ReadAllLines(path)

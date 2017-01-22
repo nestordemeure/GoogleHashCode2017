@@ -1,10 +1,10 @@
 module GHC.Export
 
 open FSharpx.Collections
+open System.IO
+
 open GHC.Extensions
 open GHC.Domain
-
-open System.IO
 
 //-------------------------------------------------------------------------------------------------
 
@@ -13,4 +13,6 @@ open System.IO
 //-------------------------------------------------------------------------------------------------
 // EXPORTATION
 
-
+let export path lines =
+   //File.WriteAllText(path, text)
+   File.WriteAllLines(path, lines)

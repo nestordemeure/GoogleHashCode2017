@@ -1,6 +1,7 @@
 module GHC.Solve
 
 open FSharpx.Collections
+
 open GHC.Extensions
 open GHC.Domain
 
