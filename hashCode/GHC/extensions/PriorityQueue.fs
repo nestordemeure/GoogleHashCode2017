@@ -1,23 +1,4 @@
-module GHC.Extensions
-
-//open System.Collections.Generic
-open System
-
-//-------------------------------------------------------------------------------------------------
-// FUNCTIONS
-
-/// unit pipe
-let inline (|->) x f = f x ; x
-
-//-------------------------------------------------------------------------------------------------
-// Array
-
-module Array =
-   /// swap the values at the given indexes
-   let inline swap (a : 'T array) i j =
-      let temp = a.[i]
-      a.[i] <- a.[j]
-      a.[j] <- temp
+namespace GHC.Extensions
 
 //-------------------------------------------------------------------------------------------------
 // PRIORITY QUEUE 
@@ -25,12 +6,12 @@ module Array =
 // adapted from : http://rosettacode.org/wiki/Priority_queue#F.23
 [<RequireQualifiedAccess>]
 module PriorityQueue =
-  type HeapEntry<'V> = struct val k:uint32 val v:'V new(k,v) = {k=k;v=v} end
+  type HeapEntry<'K,'V> = struct val k:'K val v:'V new(k,v) = {k=k;v=v} end
   [<CompilationRepresentation(CompilationRepresentationFlags.UseNullAsTrueValue)>]
   [<NoEquality; NoComparison>]
-  type PriorityQueue<'V> =
+  type PriorityQueue<'K,'V> =
          | Mt
-         | Br of HeapEntry<'V> * PriorityQueue<'V> * PriorityQueue<'V>
+         | Br of HeapEntry<'K,'V> * PriorityQueue<'K,'V> * PriorityQueue<'K,'V>
  
   let empty = Mt
  
@@ -115,7 +96,7 @@ module PriorityQueue =
                                   siftdown ck cv (build lft) (build rght)
          build (sq |> Seq.length)
  
-  let merge (pq1:PriorityQueue<_>) (pq2:PriorityQueue<_>) = // merges without using a sequence
+  let merge (pq1:PriorityQueue<_,_>) (pq2:PriorityQueue<_,_>) = // merges without using a sequence
     match pq1 with
       | Mt -> pq2
       | _ ->
@@ -160,32 +141,32 @@ module PriorityQueue =
 // adapted from : http://rosettacode.org/wiki/Priority_queue#F.23
 [<RequireQualifiedAccess>]
 module MutablePriorityQueue =
-  type HeapEntry<'T> = struct val k:uint32 val v:'T new(k,v) = { k=k;v=v } end
+  type HeapEntry<'K,'V> = struct val k:'K val v:'V new(k,v) = { k=k;v=v } end
   /// a priority queue that is changed in place, more efficient than its functionnal counterpart
-  type MutablePriorityQueue<'T> = ResizeArray<HeapEntry<'T>>
+  type MutablePriorityQueue<'K,'V> = ResizeArray<HeapEntry<'K,'V>>
  
-  let empty<'T> = MutablePriorityQueue<HeapEntry<'T>>()
+  let empty<'K,'V> = MutablePriorityQueue<HeapEntry<'K,'V>>()
  
-  let isEmpty (pq: MutablePriorityQueue<_>) = pq.Count = 0
+  let isEmpty (pq: MutablePriorityQueue<_,_>) = pq.Count = 0
  
-  let size (pq: MutablePriorityQueue<_>) = 
+  let size (pq: MutablePriorityQueue<_,_>) = 
       let cnt = pq.Count
       if cnt = 0 then 0 else cnt - 1
  
-  let peekMin (pq:MutablePriorityQueue<_>) = 
+  let peekMin (pq:MutablePriorityQueue<_,_>) = 
       if pq.Count <= 1 then None else
          let kv = pq.[0]
          Some (kv.k, kv.v)
  
-  let push k v (pq:MutablePriorityQueue<_>) =
-    if pq.Count = 0 then pq.Add(HeapEntry(0xFFFFFFFFu,v)) //add an extra entry so there's always a right max node
+  let inline push k v (pq:MutablePriorityQueue<_,_>) =
+    if pq.Count = 0 then pq.Add(HeapEntry(LanguagePrimitives.GenericZero,v)) //add an extra entry so there's always a right max node
     let mutable nxtlvl = pq.Count in let mutable lvl = nxtlvl <<< 1 //1 past index of value added times 2
     pq.Add(pq.[nxtlvl - 1]) //copy bottom entry then do bubble up while less than next level up
     while ((lvl <- lvl >>> 1); nxtlvl <- nxtlvl >>> 1; nxtlvl <> 0) do
       let t = pq.[nxtlvl - 1] in if t.k > k then pq.[lvl - 1] <- t else lvl <- lvl <<< 1; nxtlvl <- 0 //causes loop break
     pq.[lvl - 1] <-  HeapEntry(k,v)
  
-  let inline private siftdown k v ndx (pq: MutablePriorityQueue<_>) =
+  let inline private siftdown k v ndx (pq: MutablePriorityQueue<_,_>) =
     let mutable i = ndx in let mutable ni = i in let cnt = pq.Count - 1
     while (ni <- ni + ni + 1; ni < cnt) do
       let lk = pq.[ni].k in let rk = pq.[ni + 1].k in let oi = i
@@ -193,9 +174,9 @@ module MutablePriorityQueue =
       if i <> oi then pq.[oi] <- pq.[i] else ni <- cnt //causes loop break
     pq.[i] <- HeapEntry(k,v)
  
-  let replaceMin k v (pq:MutablePriorityQueue<_>) = siftdown k v 0 pq//; pq
+  let replaceMin k v (pq:MutablePriorityQueue<_,_>) = siftdown k v 0 pq//; pq
  
-  let deleteMin (pq:MutablePriorityQueue<_>) =
+  let deleteMin (pq:MutablePriorityQueue<_,_>) =
     let lsti = pq.Count - 2
     if lsti <= 0 then pq.Clear() else
       let lstkv = pq.[lsti]
@@ -203,7 +184,7 @@ module MutablePriorityQueue =
       siftdown lstkv.k lstkv.v 0 pq
  
   /// Adjust all the contents using the function, then re-heapify
-  let adjust f (pq:MutablePriorityQueue<_>) =
+  let adjust f (pq:MutablePriorityQueue<_,_>) =
     let cnt = pq.Count - 1
     let rec adj i =
       let lefti = i + i + 1 in let righti = lefti + 1
@@ -213,19 +194,7 @@ module MutablePriorityQueue =
       else pq.[i] <- HeapEntry(nk, nv)
     adj 0
  
-  let fromSeq sq = 
-    if Seq.isEmpty sq then empty
-    else let pq = new MutablePriorityQueue<_>(sq |> Seq.map (fun (k, v) -> HeapEntry(k, v)))
-         let sz = pq.Count in let lkv = pq.[sz - 1]
-         pq.Add(HeapEntry(UInt32.MaxValue, lkv.v))
-         let rec build i =
-           let lefti = i + i + 1
-           if lefti < sz then
-             let righti = lefti + 1 in build lefti; build righti
-             let ckv = pq.[i] in siftdown ckv.k ckv.v i pq
-         build 0; pq
- 
-  let merge (pq1:MutablePriorityQueue<_>) (pq2:MutablePriorityQueue<_>) =
+  let merge (pq1:MutablePriorityQueue<_,_>) (pq2:MutablePriorityQueue<_,_>) =
     if pq2.Count = 0 then pq1 else
     if pq1.Count = 0 then pq2 else
     let pq = empty

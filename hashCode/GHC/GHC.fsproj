@@ -43,7 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Compile Include="Extensions.fs" />
+    <Compile Include="extensions/Extensions.fs" />
+    <Compile Include="extensions/PriorityQueue.fs" />
     <Compile Include="Domain.fs" />
     <Compile Include="Import.fs" />
     <Compile Include="Solve.fs" />
