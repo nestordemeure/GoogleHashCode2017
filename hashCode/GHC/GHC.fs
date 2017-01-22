@@ -1,5 +1,6 @@
 module GHC
 
+open FSharpx.Collections
 open GHC.Extensions
 open GHC.Domain
 open GHC.Import
