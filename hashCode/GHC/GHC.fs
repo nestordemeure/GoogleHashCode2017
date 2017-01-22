@@ -1,5 +1,6 @@
 module GHC
 
+open GHC.Extensions
 open GHC.Domain
 open GHC.Import
 open GHC.Solve
