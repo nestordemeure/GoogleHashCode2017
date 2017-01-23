@@ -1,5 +1,8 @@
 namespace GHC.Extensions
 
+open System
+open GHC.Extensions
+
 //-------------------------------------------------------------------------------------------------
 // PRIORITY QUEUE 
 
@@ -124,6 +127,16 @@ module PriorityQueue =
                       | None -> None
                       | Some(kv) -> Some(kv, deleteMin pq)
  
+  let fromSeq sq = 
+    if Seq.isEmpty sq then Mt
+    else let nmrtr = sq.GetEnumerator()
+         let rec build lvl = if lvl = 0 || not (nmrtr.MoveNext()) then Mt
+                             else let ck, cv = nmrtr.Current
+                                  let lft = lvl >>> 1
+                                  let rght = (lvl - 1) >>> 1
+                                  siftdown ck cv (build lft) (build rght)
+         build (sq |> Seq.length)
+  
   let toSeq pq = Seq.unfold popMin pq
  
 //-------------------------------------------------------------------------------------------------
@@ -204,3 +217,23 @@ module MPriorityQueue =
    match peekMin pq with
    | None     -> None
    | Some(kv) -> deleteMin pq ; Some kv
+
+  let inline fromSeq sq = 
+    if Seq.isEmpty sq then empty
+    else let pq = new MutablePriorityQueue<_,_>(sq |> Seq.map (fun (k, v) -> HeapEntry(k, v)))
+         let sz = pq.Count in let lkv = pq.[sz - 1]
+         pq.Add(HeapEntry(LanguagePrimitives.maxValue(), lkv.v))
+         let rec build i =
+           let lefti = i + i + 1
+           if lefti < sz then
+             let righti = lefti + 1 in build lefti; build righti
+             let ckv = pq.[i] in siftdown ckv.k ckv.v i pq
+         build 0; pq
+
+  let toSeq (pq:MutablePriorityQueue<_,_>) = 
+    seq {
+      let mutable result = popMin pq
+      while result <> None do 
+        yield result
+        result <- popMin pq
+    }
