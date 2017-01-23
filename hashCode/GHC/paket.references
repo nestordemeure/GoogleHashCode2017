@@ -1,3 +1,4 @@
 FSharp.Core
 FSharp.Collections.ParallelSeq
 FSharpx.Collections
+System.Text.RegularExpressions
