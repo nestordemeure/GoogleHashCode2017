@@ -14,6 +14,7 @@ open GHC.Export
 
 let mutable score = 0
 
+let evaluation solution = ()
 
 //-------------------------------------------------------------------------------------------------
 // MAIN
@@ -22,12 +23,13 @@ let mutable score = 0
 let main argv =
     //printfn "%A" argv
     // import
-
+    let inPath = "../input.in"
+    let r = import inPath
     // solution
 
     // evaluation
-
+    evaluation r
     printfn "score : %d" score
     //export 
-
+    export "../output.txt" [||]
     0 // return an integer exit code
