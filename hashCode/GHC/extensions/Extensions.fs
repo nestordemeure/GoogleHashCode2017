@@ -23,26 +23,7 @@ module Array =
       a.[j] <- temp
 
 //-------------------------------------------------------------------------------------------------
-// LIST
-
-module List =
-   /// output a list as a string separated by the given string
-   let toString sep (l : string list) =
-      match l with 
-      | [] -> ""
-      | _ -> List.reduce (fun acc s -> acc + sep + s ) l
-
-//-------------------------------------------------------------------------------------------------
-// MUTABLE SET 
-
-/// modify in place set
-module MSet =
-    type MutableSet = int
-    (*let contains e s =
-        Set.co*)
-
-//-------------------------------------------------------------------------------------------------
-// GENERIC MAXVALUE
+// GENERIC MAXVALUE (for generic priority queue)
 
 module LanguagePrimitives =
   type MaxValue = MaxValue with

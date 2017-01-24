@@ -7,7 +7,7 @@ open GHC.Extensions
 // PRIORITY QUEUE 
 
 // adapted from : http://rosettacode.org/wiki/Priority_queue#F.23
-/// Priority Queue
+/// Min Priority Queue
 [<RequireQualifiedAccess>]
 module PriorityQueue =
   type HeapEntry<'K,'V> = struct val k:'K val v:'V new(k,v) = {k=k;v=v} end
@@ -143,7 +143,7 @@ module PriorityQueue =
 // MUTABLE PRIORITY QUEUE 
 
 // adapted from : http://rosettacode.org/wiki/Priority_queue#F.23
-/// change-in-place priority queue, quicker if you can use them
+/// change-in-place Min Priority Queue, quicker if you can use them
 [<RequireQualifiedAccess>]
 module MPriorityQueue =
   type HeapEntry<'K,'V> = struct val k:'K val v:'V new(k,v) = { k=k;v=v } end

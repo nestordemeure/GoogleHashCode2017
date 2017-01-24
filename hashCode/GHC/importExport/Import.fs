@@ -1,7 +1,8 @@
 module GHC.Import
 
-open FSharpx.Collections
 open System.IO
+open ExtCore.Collections
+open ExtCore.IO
 
 open GHC.Extensions.Common
 open GHC.Extensions.Scanf

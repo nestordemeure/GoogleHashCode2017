@@ -1,8 +1,9 @@
-module GHC
+module GHC.Main
 
-open FSharpx.Collections
+open ExtCore.Collections
 
 open GHC.Extensions
+open GHC.Extensions.Common
 open GHC.Domain
 open GHC.Import
 open GHC.Solve
@@ -10,9 +11,7 @@ open GHC.Export
 
 //-------------------------------------------------------------------------------------------------
 
-// missing :
-// toseq, fromseq 
-// mutable set
+
 
 //-------------------------------------------------------------------------------------------------
 // MAIN
