@@ -3,4 +3,3 @@ nuget ExtCore
 nuget FAKE
 nuget FSharp.Collections.ParallelSeq
 nuget FSharp.Core
-nuget System.Text.RegularExpressions
