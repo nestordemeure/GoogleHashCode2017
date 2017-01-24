@@ -10,7 +10,9 @@ open GHC.Solve
 open GHC.Export
 
 //-------------------------------------------------------------------------------------------------
+// EVALUATION
 
+let mutable score = 0
 
 
 //-------------------------------------------------------------------------------------------------
@@ -18,5 +20,14 @@ open GHC.Export
 
 [<EntryPoint>]
 let main argv =
-    printfn "%A" argv
+    //printfn "%A" argv
+    // import
+
+    // solution
+
+    // evaluation
+
+    printfn "score : %d" score
+    //export 
+
     0 // return an integer exit code

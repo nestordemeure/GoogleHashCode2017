@@ -8,7 +8,7 @@ open GHC.Domain
 
 //-------------------------------------------------------------------------------------------------
 
-/// turns a list of strings into a single string
+/// turns a list of strings into a single string (containing the elements IN order)
 let listToString sep (l : string list) =
     match l with 
     | [] -> ""
