@@ -37,7 +37,7 @@ module List =
 
 /// modify in place set
 module MSet =
-    type MutableSet = int
+    type MutableSet<'T> = 'T
     (*let contains e s =
         Set.co*)
 
