@@ -1,8 +1,9 @@
 module GHC.Solve
 
-open FSharpx.Collections
+open ExtCore.Collections
 
 open GHC.Extensions
+open GHC.Extensions.Common
 open GHC.Domain
 
 //-------------------------------------------------------------------------------------------------
@@ -12,4 +13,5 @@ open GHC.Domain
 //-------------------------------------------------------------------------------------------------
 // SOLUTION
 
-
+/// solution
+let solution data = data

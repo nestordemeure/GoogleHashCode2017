@@ -1,21 +1,39 @@
-module GHC
+module GHC.Main
 
-open FSharpx.Collections
+open ExtCore.Collections
 
 open GHC.Extensions
+open GHC.Extensions.Common
 open GHC.Domain
 open GHC.Import
 open GHC.Solve
 open GHC.Export
 
 //-------------------------------------------------------------------------------------------------
+// EVALUATION
 
+<<<<<<< HEAD
 
+=======
+let mutable score = 0
+
+let evaluation solution = ()
+>>>>>>> 14a8388965b1444935889e7586ed53238e08865f
 
 //-------------------------------------------------------------------------------------------------
 // MAIN
 
 [<EntryPoint>]
 let main argv =
-    printfn "%A" argv
+    //printfn "%A" argv
+    // import
+    let inPath = "../input.in"
+    let r = import inPath
+    // solution
+
+    // evaluation
+    evaluation r
+    printfn "score : %d" score
+    //export 
+    export "../output.txt" [||]
     0 // return an integer exit code
