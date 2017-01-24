@@ -2,7 +2,7 @@ module GHC.Extensions.Scanf
 
 open System
 open System.Text
-open System.Text.RegularExpressions // add ref to system ???
+open System.Text.RegularExpressions
 open Microsoft.FSharp.Reflection
 
 //-------------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 module GHC.Domain
 
-open ExtCore.Collections
+open Extcore.Collections
 open System.Collections.Generic
 
 open GHC.Extensions

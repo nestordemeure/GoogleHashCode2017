@@ -4,8 +4,6 @@ NUGET
     FAKE (4.50)
     FSharp.Collections.ParallelSeq (1.0.2)
     FSharp.Core (4.0.0.1)
-    FSharpx.Collections (1.15.2)
-      FSharp.Core
     Microsoft.NETCore.Platforms (1.1) - framework: dnxcore50, netstandard10, netstandard13, >= netstandard16
     Microsoft.NETCore.Targets (1.1) - framework: dnxcore50, netstandard10, netstandard13, >= netstandard16
     System.Collections (4.3) - framework: dnxcore50, >= netstandard16
