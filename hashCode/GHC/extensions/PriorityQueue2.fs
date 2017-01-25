@@ -19,10 +19,18 @@ module MPriorityQueue =
   //---------------------------------------------
 
   let inline private father i = (i-1)/2
-
   let inline private son1 i = 1 + 2*i
-
   let inline private son2 i = 2 + 2*i
+
+  /// insert k v pq = travelUp k v pq.Count pq
+  let rec travelUp myKey myValue myPosition (pq: MutablePriorityQueue<_,_>) =
+    let positionFather = father myPosition
+    let father = pq.[positionFather]
+    if myValue < father.k then 
+      pq.[myPosition] <- father 
+      travelUp myKey myValue positionFather pq
+    else pq.[myPosition] <- HeapEntry(myKey,myValue)
+
 
   //---------------------------------------------
 
