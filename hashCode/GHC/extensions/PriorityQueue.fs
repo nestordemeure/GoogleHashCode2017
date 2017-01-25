@@ -178,7 +178,7 @@ module PriorityQueue =
 // adapted from : http://rosettacode.org/wiki/Priority_queue#F.23
 /// change-in-place Min Priority Queue, quicker if you can use them
 [<RequireQualifiedAccess>]
-module MPriorityQueue =
+module BuggedMPriorityQueue =
   type HeapEntry<'K,'V> = struct val k:'K val v:'V new(k,v) = { k=k;v=v } end
   /// a priority queue that is changed in place, more efficient than its functionnal counterpart
   type MutablePriorityQueue<'K,'V> = ResizeArray<HeapEntry<'K,'V>>
