@@ -2,6 +2,7 @@ namespace GHC.Extensions
 
 open System
 open GHC.Extensions
+open GHC.Extensions.Common
 
 //-------------------------------------------------------------------------------------------------
 // GENERIC MAXVALUE (for generic priority queue)
@@ -46,8 +47,8 @@ module PriorityQueue =
   [<CompilationRepresentation(CompilationRepresentationFlags.UseNullAsTrueValue)>]
   [<NoEquality; NoComparison>]
   type PriorityQueue<'K,'V> =
-         | Mt
-         | Br of HeapEntry<'K,'V> * PriorityQueue<'K,'V> * PriorityQueue<'K,'V>
+      | Mt
+      | Br of HeapEntry<'K,'V> * PriorityQueue<'K,'V> * PriorityQueue<'K,'V>
  
   let empty = Mt
  
@@ -197,6 +198,7 @@ module MPriorityQueue =
  
   let inline push k v (pq:MutablePriorityQueue<_,_>) =
     if pq.Count = 0 then pq.Add(HeapEntry(LanguagePrimitives.GenericZero,v)) //add an extra entry so there's always a right max node
+    //if pq.Count = 0 then pq.Add(HeapEntry(k,v)) //add an extra entry so there's always a right max node
     let mutable nxtlvl = pq.Count in let mutable lvl = nxtlvl <<< 1 //1 past index of value added times 2
     pq.Add(pq.[nxtlvl - 1]) //copy bottom entry then do bubble up while less than next level up
     while ((lvl <- lvl >>> 1); nxtlvl <- nxtlvl >>> 1; nxtlvl <> 0) do
@@ -266,6 +268,9 @@ module MPriorityQueue =
     seq {
       let mutable result = popMin pq
       while result <> None do 
-        yield result
+        match result with 
+        | Some r -> yield r
+        | None -> ()
+        //yield result
         result <- popMin pq
     }
