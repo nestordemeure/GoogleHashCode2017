@@ -16,6 +16,16 @@ module MPriorityQueue =
   /// a priority queue that is changed in place, more efficient than its functionnal counterpart
   type MutablePriorityQueue<'K,'V> = ResizeArray<HeapEntry<'K,'V>>
  
+  //---------------------------------------------
+
+  let inline private father i = (i-1)/2
+
+  let inline private son1 i = 1 + 2*i
+
+  let inline private son2 i = 2 + 2*i
+
+  //---------------------------------------------
+
   let empty<'K,'V> = MutablePriorityQueue<HeapEntry<'K,'V>>()
  
   let inline isEmpty (pq: MutablePriorityQueue<_,_>) = pq.Count = 0
