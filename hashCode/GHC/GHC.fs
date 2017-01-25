@@ -41,10 +41,28 @@ let main argv =
     MPriorityQueue.push 2 2 q1
     MPriorityQueue.push 3 3 q1
     MPriorityQueue.push 4 4 q1
+    MPriorityQueue.push 5 4 q1
+    MPriorityQueue.push 6 4 q1
+    MPriorityQueue.push 7 4 q1
+    MPriorityQueue.push 8 4 q1
+    MPriorityQueue.push 9 4 q1
 
+    MPriorityQueue.popMin q1 |> printfn "min : %A"
+    MPriorityQueue.popMin q1 |> printfn "min : %A"
+    MPriorityQueue.popMin q1 |> printfn "min : %A"
+    MPriorityQueue.popMin q1 |> printfn "min : %A"
+    MPriorityQueue.popMin q1 |> printfn "min : %A"
+    MPriorityQueue.popMin q1 |> printfn "min : %A"
+    MPriorityQueue.popMin q1 |> printfn "min : %A"
+    MPriorityQueue.popMin q1 |> printfn "min : %A"
+    MPriorityQueue.popMin q1 |> printfn "min : %A"
+    MPriorityQueue.popMin q1 |> printfn "min : %A"
+    MPriorityQueue.popMin q1 |> printfn "min : %A"
+    
     let mi = MPriorityQueue.popMin q1
     
-    MPriorityQueue.toSeq q1 |> printfn "q1 : %A"
+    let s = MPriorityQueue.toSeq q1 
+    s |> printfn "q1 : %A"
     printfn "min : %A" mi
 
     0 // return an integer exit code

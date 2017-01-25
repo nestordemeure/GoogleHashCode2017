@@ -37,22 +37,23 @@ module MPriorityQueue =
 
   /// buble down an element from myPosition to, potentialy, the bottom of the heap
   let inline private bubleDown (kv:HeapEntry<_,_>) myPosition (pq: MutablePriorityQueue<_,_>) =
-    let mutable myPosition = myPosition 
-    let mutable bestPosition = myPosition
-    let mutable positionSon1 = getSon1 myPosition
-    let mutable positionSon2 = getSon2 myPosition
-    let mutable keepGoing = true
-    while keepGoing do 
-        if positionSon1 < pq.Count && pq.[myPosition].k > pq.[positionSon1].k then 
-          bestPosition <- positionSon1
-        if positionSon2 < pq.Count && pq.[bestPosition].k > pq.[positionSon2].k then 
-          bestPosition <- positionSon2
-        if myPosition = bestPosition then keepGoing <- false else
-          pq.[myPosition] <- pq.[bestPosition]
-          myPosition <- bestPosition
-          positionSon1 <- getSon1 myPosition
-          positionSon2 <- getSon2 myPosition
-    pq.[myPosition] <- kv
+    if myPosition < pq.Count then 
+      let mutable myPosition = myPosition 
+      let mutable bestPosition = myPosition
+      let mutable positionSon1 = getSon1 myPosition
+      let mutable positionSon2 = getSon2 myPosition
+      let mutable keepGoing = true
+      while keepGoing do 
+          if positionSon1 < pq.Count && pq.[myPosition].k > pq.[positionSon1].k then 
+            bestPosition <- positionSon1
+          if positionSon2 < pq.Count && pq.[bestPosition].k > pq.[positionSon2].k then 
+            bestPosition <- positionSon2
+          if myPosition = bestPosition then keepGoing <- false else
+            pq.[myPosition] <- pq.[bestPosition]
+            myPosition <- bestPosition
+            positionSon1 <- getSon1 myPosition
+            positionSon2 <- getSon2 myPosition
+      pq.[myPosition] <- kv
 
   //---------------------------------------------
 
@@ -65,7 +66,9 @@ module MPriorityQueue =
   let inline size (pq: MutablePriorityQueue<_,_>) = pq.Count
  
   let push k v (pq:MutablePriorityQueue<_,_>) =
-    if pq.Count = 0 then pq.[0] <- HeapEntry(k,v) else bubleUp (HeapEntry(k,v)) pq.Count pq
+    let newElement = HeapEntry(k,v)
+    pq.Add(newElement)
+    bubleUp newElement (pq.Count-1) pq
 
   let deleteMin (pq: MutablePriorityQueue<_,_>) =
     let bottomElement = pq.[pq.Count - 1]
@@ -88,4 +91,6 @@ module MPriorityQueue =
       bubleDown pq.[i] i pq
     pq
 
-  let toSeq (pq:MutablePriorityQueue<_,_>) = pq |> Seq.map (fun kv -> kv.k, kv.v)
+  let toSeq (pq:MutablePriorityQueue<_,_>) = 
+    Seq.init pq.Count (fun i -> popMin pq)
+    //pq |> Seq.map (fun kv -> kv.k, kv.v)
