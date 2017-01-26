@@ -9,7 +9,7 @@ open GHC.Extensions.Common
 
 /// tries to find the state which minimize the evaluation function
 /// a state will be developed in children states using developState (final states should return a Seq.empty)
-let inline solve (initialState : 'State) (initialValue : 'Value) evaluateState developState =
+let solve (initialState : 'State) (initialValue : 'Value) evaluateState developState =
   let mutable bestState = initialState
   let mutable bestValue = initialValue
   /// previously tested states (memoization)
