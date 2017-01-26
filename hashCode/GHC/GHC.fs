@@ -8,6 +8,7 @@ open GHC.Domain
 open GHC.Import
 open GHC.Solve
 open GHC.Export
+open System.Collections.Generic
 
 //-------------------------------------------------------------------------------------------------
 // EVALUATION
@@ -21,6 +22,7 @@ let evaluation solution = ()
 
 [<EntryPoint>]
 let main argv =
+(*
     //printfn "%A" argv
     // import
     let inPath = "../input.in"
@@ -32,7 +34,9 @@ let main argv =
     printfn "score : %d" score
     //export 
     export "../output.txt" [||]
-
-    let t = MinPQ.toSeq
+*)
+    let hs = HashSet()
+    hs.Add(1) |> ignore
+    hs |> seq |> printfn "%A"
 
     0 // return an integer exit code

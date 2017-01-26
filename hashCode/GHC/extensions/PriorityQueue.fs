@@ -375,7 +375,7 @@ module MPriorityQueue =
 /// a max priority queue that is changed in place, more efficient than its functionnal counterpart
 [<RequireQualifiedAccess>]
 module MaxMPriorityQueue =
-  // only bubleup and bubledown are modified, it would be nice to find a way to factorise the code
+  // only bubleUp and bubleDown are modified, it would be nice to find a way to factorise the code
   let inline private kvToTuple (kv:HeapEntry<_,_>) = kv.k, kv.v
   let inline private getFather i = (i-1)/2
   let inline private getSon1 i = 1 + 2*i
@@ -458,5 +458,3 @@ module MaxMPriorityQueue =
 
   let toArray (pq:MutablePriorityQueue<_,_>) = 
     Array.init pq.Count (fun i -> kvToTuple pq.[i])
-
-//-------------------------------------------------------------------------------------------------
