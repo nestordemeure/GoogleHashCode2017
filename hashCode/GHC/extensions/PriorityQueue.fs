@@ -1,40 +1,9 @@
 namespace GHC.Extensions
 
 open System
+open ExtCore.Collections
 open GHC.Extensions
 open GHC.Extensions.Common
-
-//-------------------------------------------------------------------------------------------------
-// GENERIC MAXVALUE (for generic priority queue)
-
-module LanguagePrimitives =
-  type MaxValue = MaxValue with
-      static member ($) (_:unit          , _:MaxValue) = ()
-      static member ($) (_:bool          , _:MaxValue) = true
-      static member ($) (_:char          , _:MaxValue) = Char.MaxValue
-      static member ($) (_:byte          , _:MaxValue) = Byte.MaxValue
-      static member ($) (_:sbyte         , _:MaxValue) = SByte.MaxValue
-      static member ($) (_:float         , _:MaxValue) = Double.MaxValue
-      static member ($) (_:int16         , _:MaxValue) = Int16.MaxValue
-      static member ($) (_:int           , _:MaxValue) = Int32.MaxValue
-      static member ($) (_:int64         , _:MaxValue) = Int64.MaxValue
-      static member ($) (_:float32       , _:MaxValue) = Single.MaxValue
-      static member ($) (_:uint16        , _:MaxValue) = UInt16.MaxValue
-      static member ($) (_:uint32        , _:MaxValue) = UInt32.MaxValue
-      static member ($) (_:uint64        , _:MaxValue) = UInt64.MaxValue
-      static member ($) (_:decimal       , _:MaxValue) = Decimal.MaxValue
-      static member ($) (_:DateTime      , _:MaxValue) = DateTime.MaxValue
-      static member ($) (_:DateTimeOffset, _:MaxValue) = DateTimeOffset.MaxValue
-      static member ($) (_:TimeSpan      , _:MaxValue) = TimeSpan.MaxValue
-
-  /// generic maxValue
-  let inline maxValue() :'r =  Unchecked.defaultof<'r> $ MaxValue
-
-  type MaxValue with
-      static member inline ($) ((_:'a*'b         ), _:MaxValue) = maxValue(), maxValue()
-      static member inline ($) ((_:'a*'b*'c      ), _:MaxValue) = maxValue(), maxValue(), maxValue()
-      static member inline ($) ((_:'a*'b*'c*'d   ), _:MaxValue) = maxValue(), maxValue(), maxValue(), maxValue()
-      static member inline ($) ((_:'a*'b*'c*'d*'e), _:MaxValue) = maxValue(), maxValue(), maxValue(), maxValue(), maxValue()
 
 //-------------------------------------------------------------------------------------------------
 // PRIORITY QUEUE 
@@ -175,102 +144,96 @@ module PriorityQueue =
 //-------------------------------------------------------------------------------------------------
 // MUTABLE PRIORITY QUEUE 
 
-// adapted from : http://rosettacode.org/wiki/Priority_queue#F.23
-/// change-in-place Min Priority Queue, quicker if you can use them
+// adapted from : https://en.wikipedia.org/wiki/Binary_heap
+/// change-in-place Min Priority Queue, quicker
 [<RequireQualifiedAccess>]
-module BuggedMPriorityQueue =
+module MPriorityQueue =
   type HeapEntry<'K,'V> = struct val k:'K val v:'V new(k,v) = { k=k;v=v } end
   /// a priority queue that is changed in place, more efficient than its functionnal counterpart
   type MutablePriorityQueue<'K,'V> = ResizeArray<HeapEntry<'K,'V>>
  
-  let empty<'K,'V> = MutablePriorityQueue<HeapEntry<'K,'V>>()
+  //---------------------------------------------
+
+  let inline private kvToTuple (kv:HeapEntry<_,_>) = kv.k, kv.v
+
+  let inline private getFather i = (i-1)/2
+  let inline private getSon1 i = 1 + 2*i
+  let inline private getSon2 i = 2 + 2*i
+
+  /// buble up an element from myPosition to, potentialy, the top of the heap
+  let inline private bubleUp (kv:HeapEntry<_,_>) myPosition (pq: MutablePriorityQueue<_,_>) =
+    let mutable myPosition = myPosition 
+    let mutable positionFather = getFather myPosition
+    let mutable father = pq.[positionFather]
+    while kv.k < father.k && myPosition > 0 do 
+        pq.[myPosition] <- father 
+        myPosition <- positionFather
+        positionFather <- getFather myPosition
+        father <- pq.[positionFather]
+    pq.[myPosition] <- kv
+
+  /// buble down an element from myPosition to, potentialy, the bottom of the heap
+  let inline private bubleDown (kv:HeapEntry<_,_>) myPosition (pq: MutablePriorityQueue<_,_>) =
+    if myPosition < pq.Count then 
+      let mutable myPosition = myPosition 
+      let mutable positionSon1 = getSon1 myPosition
+      let mutable positionSon2 = getSon2 myPosition
+      let mutable keepGoing = true
+      // explore both childrens while they are legal and better than kv
+      while keepGoing && positionSon2 < pq.Count && positionSon1 < pq.Count do 
+          match pq.[positionSon1].k < pq.[positionSon2].k with 
+          | true when kv.k > pq.[positionSon1].k ->
+              pq.[myPosition] <- pq.[positionSon1]
+              myPosition <- positionSon1
+          | false when kv.k > pq.[positionSon2].k ->
+              pq.[myPosition] <- pq.[positionSon2]
+              myPosition <- positionSon2
+          | _ -> keepGoing <- false
+          positionSon1 <- getSon1 myPosition
+          positionSon2 <- getSon2 myPosition
+      // was Son1 not explored because son2 is not legal anymore (bottom of the tree)
+      if positionSon1 < pq.Count && kv.k > pq.[positionSon1].k then 
+          pq.[myPosition] <- pq.[positionSon1]
+          myPosition <- positionSon1
+      pq.[myPosition] <- kv
+
+  //---------------------------------------------
+
+  let empty<'K,'V> : MutablePriorityQueue<_,_> = MutablePriorityQueue<HeapEntry<'K,'V>>()
+
+  let singleton k v : MutablePriorityQueue<_,_> = HeapEntry(k,v) |> ResizeArray.singleton
  
-  let isEmpty (pq: MutablePriorityQueue<_,_>) = pq.Count = 0
+  let inline isEmpty (pq: MutablePriorityQueue<_,_>) = pq.Count = 0
  
-  let size (pq: MutablePriorityQueue<_,_>) = 
-      let cnt = pq.Count
-      if cnt = 0 then 0 else cnt - 1
+  let inline size (pq: MutablePriorityQueue<_,_>) = pq.Count
  
+  let push k v (pq:MutablePriorityQueue<_,_>) =
+    let newElement = HeapEntry(k,v)
+    pq.Add(newElement)
+    bubleUp newElement (pq.Count-1) pq
+
+  let deleteMin (pq: MutablePriorityQueue<_,_>) =
+    let bottomElement = pq.[pq.Count - 1]
+    pq.RemoveAt(pq.Count - 1) // shrink the queue to get rid of the bottom element
+    bubleDown bottomElement 0 pq
+
   let peekMin (pq:MutablePriorityQueue<_,_>) = 
-      if pq.Count <= 1 then None else
+      if pq.Count < 1 then None else
          let kv = pq.[0]
          Some (kv.k, kv.v)
  
-  let inline push k v (pq:MutablePriorityQueue<_,_>) =
-    if pq.Count = 0 then pq.Add(HeapEntry(LanguagePrimitives.GenericZero,v)) //add an extra entry so there's always a right max node
-    //if pq.Count = 0 then pq.Add(HeapEntry(k,v)) //add an extra entry so there's always a right max node
-    let mutable nxtlvl = pq.Count in let mutable lvl = nxtlvl <<< 1 //1 past index of value added times 2
-    pq.Add(pq.[nxtlvl - 1]) //copy bottom entry then do bubble up while less than next level up
-    while ((lvl <- lvl >>> 1); nxtlvl <- nxtlvl >>> 1; nxtlvl <> 0) do
-      let t = pq.[nxtlvl - 1] in if t.k > k then pq.[lvl - 1] <- t else lvl <- lvl <<< 1; nxtlvl <- 0 //causes loop break
-    pq.[lvl - 1] <-  HeapEntry(k,v)
- 
-  let inline private siftdown k v ndx (pq: MutablePriorityQueue<_,_>) =
-    let mutable i = ndx in let mutable ni = i in let cnt = pq.Count - 1
-    while (ni <- ni + ni + 1; ni < cnt) do
-      let lk = pq.[ni].k in let rk = pq.[ni + 1].k in let oi = i
-      let k = if k > lk then i <- ni; lk else k in if k > rk then ni <- ni + 1; i <- ni
-      if i <> oi then pq.[oi] <- pq.[i] else ni <- cnt //causes loop break
-    pq.[i] <- HeapEntry(k,v)
- 
-  let replaceMin k v (pq:MutablePriorityQueue<_,_>) = siftdown k v 0 pq//; pq
- 
-  let deleteMin (pq:MutablePriorityQueue<_,_>) =
-    let lsti = pq.Count - 2
-    if lsti <= 0 then pq.Clear() else
-      let lstkv = pq.[lsti]
-      pq.RemoveAt(lsti)
-      siftdown lstkv.k lstkv.v 0 pq
- 
-  /// Adjust all the contents using the function, then re-heapify
-  let adjust f (pq:MutablePriorityQueue<_,_>) =
-    let cnt = pq.Count - 1
-    let rec adj i =
-      let lefti = i + i + 1 in let righti = lefti + 1
-      let ckv = pq.[i] in let (nk, nv) = f ckv.k ckv.v
-      if righti < cnt then adj righti
-      if lefti < cnt then adj lefti; siftdown nk nv i pq
-      else pq.[i] <- HeapEntry(nk, nv)
-    adj 0
- 
-  let merge (pq1:MutablePriorityQueue<_,_>) (pq2:MutablePriorityQueue<_,_>) =
-    if pq2.Count = 0 then pq1 else
-    if pq1.Count = 0 then pq2 else
-    let pq = empty
-    pq.AddRange(pq1); pq.RemoveAt(pq.Count - 1)
-    pq.AddRange(pq2)
-    let sz = pq.Count - 1
-    let rec build i =
-      let lefti = i + i + 1
-      if lefti < sz then
-        let righti = lefti + 1 in build lefti; build righti
-        let ckv = pq.[i] in siftdown ckv.k ckv.v i pq
-    build 0; pq
- 
-  let popMin pq = 
-   match peekMin pq with
-   | None     -> None
-   | Some(kv) -> deleteMin pq ; Some kv
+  let popMin (pq:MutablePriorityQueue<_,_>) = 
+      if pq.Count < 1 then None else
+         let kv = pq.[0]
+         deleteMin pq ; Some (kv.k, kv.v)
+  
+  let fromSeq sq = 
+    let pq : MutablePriorityQueue<_,_> = sq |> Seq.map (fun (k,v) -> HeapEntry(k,v)) |> ResizeArray.ofSeq 
+    for i = pq.Count/2 downto 1 do 
+      bubleDown pq.[i] i pq
+    pq
 
-  let inline fromSeq sq = 
-    if Seq.isEmpty sq then empty
-    else let pq = new MutablePriorityQueue<_,_>(sq |> Seq.map (fun (k, v) -> HeapEntry(k, v)))
-         let sz = pq.Count in let lkv = pq.[sz - 1]
-         pq.Add(HeapEntry(LanguagePrimitives.maxValue(), lkv.v))
-         let rec build i =
-           let lefti = i + i + 1
-           if lefti < sz then
-             let righti = lefti + 1 in build lefti; build righti
-             let ckv = pq.[i] in siftdown ckv.k ckv.v i pq
-         build 0; pq
+  let toSeq (pq:MutablePriorityQueue<_,_>) = Seq.map kvToTuple pq
 
-  let toSeq (pq:MutablePriorityQueue<_,_>) = 
-    seq {
-      let mutable result = popMin pq
-      while result <> None do 
-        match result with 
-        | Some r -> yield r
-        | None -> ()
-        //yield result
-        result <- popMin pq
-    }
+  let toArray (pq:MutablePriorityQueue<_,_>) = 
+    Array.init pq.Count (fun i -> kvToTuple pq.[i])

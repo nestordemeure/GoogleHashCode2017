@@ -46,7 +46,6 @@
     <Compile Include="extensions/Extensions.fs" />
     <Compile Include="extensions/Scanf.fs" />
     <Compile Include="extensions/PriorityQueue.fs" />
-    <Compile Include="extensions/PriorityQueue2.fs" />
     <Compile Include="extensions/DynamicSolver.fs" />
     <Compile Include="Domain.fs" />
     <Compile Include="importExport/Import.fs" />

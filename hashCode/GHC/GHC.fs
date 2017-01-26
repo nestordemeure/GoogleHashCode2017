@@ -101,11 +101,4 @@ let main argv =
     MPriorityQueue.popMin q1 |> printfn "min : %A"
     q1 |> MPriorityQueue.toSeq |> printfn "%A"
 
-    
-    let mi = MPriorityQueue.popMin q1
-    
-    let s = MPriorityQueue.toSeq q1 
-    s |> printfn "q1 : %A"
-    printfn "min : %A" mi
-
     0 // return an integer exit code
