@@ -35,8 +35,5 @@ let main argv =
     //export 
     export "../output.txt" [||]
 *)
-    let hs = HashSet()
-    hs.Add(1) |> ignore
-    hs |> seq |> printfn "%A"
 
     0 // return an integer exit code
