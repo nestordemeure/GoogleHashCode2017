@@ -150,7 +150,7 @@ module PriorityQueue =
 /// a priority queue that is changed in place, more efficient than its functionnal counterpart
 type MutablePriorityQueue<'K,'V> = ResizeArray<HeapEntry<'K,'V>>
 
-/// change-in-place Min Priority Queue, quicker
+/// a priority queue that is changed in place, more efficient than its functionnal counterpart
 [<RequireQualifiedAccess>]
 module MPriorityQueue =
 
@@ -238,12 +238,13 @@ module MPriorityQueue =
     Array.init pq.Count (fun i -> kvToTuple pq.[i])
 
 //-------------------------------------------------------------------------------------------------
+// MUTABLE MAX PRIORITY QUEUE 
+// adapted from : https://en.wikipedia.org/wiki/Binary_heap
 
-
-/// change-in-place Max Priority Queue
+/// a max priority queue that is changed in place, more efficient than its functionnal counterpart
 [<RequireQualifiedAccess>]
 module MaxMPriorityQueue =
-
+  // only bubleup and bubledown are modified, it would be nice to find a way to factorise the code
   let inline private kvToTuple (kv:HeapEntry<_,_>) = kv.k, kv.v
   let inline private getFather i = (i-1)/2
   let inline private getSon1 i = 1 + 2*i
@@ -301,20 +302,20 @@ module MaxMPriorityQueue =
     pq.Add(newElement)
     bubleUp newElement (pq.Count-1) pq
 
-  let deleteMin (pq: MutablePriorityQueue<_,_>) =
+  let deleteMax (pq: MutablePriorityQueue<_,_>) =
     let bottomElement = pq.[pq.Count - 1]
     pq.RemoveAt(pq.Count - 1) // shrink the queue to get rid of the bottom element
     bubleDown bottomElement 0 pq
 
-  let peekMin (pq:MutablePriorityQueue<_,_>) = 
+  let peekMax (pq:MutablePriorityQueue<_,_>) = 
       if pq.Count < 1 then None else
          let kv = pq.[0]
          Some (kv.k, kv.v)
  
-  let popMin (pq:MutablePriorityQueue<_,_>) = 
+  let popMax (pq:MutablePriorityQueue<_,_>) = 
       if pq.Count < 1 then None else
          let kv = pq.[0]
-         deleteMin pq ; Some (kv.k, kv.v)
+         deleteMax pq ; Some (kv.k, kv.v)
   
   let fromSeq sq = 
     let pq : MutablePriorityQueue<_,_> = sq |> Seq.map (fun (k,v) -> HeapEntry(k,v)) |> ResizeArray.ofSeq 
