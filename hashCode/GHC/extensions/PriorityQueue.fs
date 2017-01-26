@@ -5,6 +5,7 @@ open ExtCore.Collections
 open GHC.Extensions
 open GHC.Extensions.Common
 
+/// struct to store a value and its key (cache friendly)
 type HeapEntry<'K,'V> = struct val k:'K val v:'V new(k,v) = {k=k;v=v} end
 
 //-------------------------------------------------------------------------------------------------
