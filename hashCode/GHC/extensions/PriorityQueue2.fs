@@ -39,20 +39,25 @@ module MPriorityQueue =
   let inline private bubleDown (kv:HeapEntry<_,_>) myPosition (pq: MutablePriorityQueue<_,_>) =
     if myPosition < pq.Count then 
       let mutable myPosition = myPosition 
-      let mutable bestPosition = myPosition
       let mutable positionSon1 = getSon1 myPosition
       let mutable positionSon2 = getSon2 myPosition
       let mutable keepGoing = true
       while keepGoing do 
-          if positionSon1 < pq.Count && pq.[myPosition].k > pq.[positionSon1].k then 
-            bestPosition <- positionSon1
-          if positionSon2 < pq.Count && pq.[bestPosition].k > pq.[positionSon2].k then 
-            bestPosition <- positionSon2
-          if myPosition = bestPosition then keepGoing <- false else
-            pq.[myPosition] <- pq.[bestPosition]
-            myPosition <- bestPosition
-            positionSon1 <- getSon1 myPosition
-            positionSon2 <- getSon2 myPosition
+          if positionSon1 < pq.Count then 
+              if positionSon2 < pq.Count && pq.[positionSon2].k <= pq.[positionSon1].k then 
+                  if kv.k > pq.[positionSon2].k then 
+                      pq.[myPosition] <- pq.[positionSon2]
+                      myPosition <- positionSon2
+                      positionSon1 <- getSon1 myPosition
+                      positionSon2 <- getSon2 myPosition
+                  else keepGoing <- false
+              elif kv.k > pq.[positionSon1].k then 
+                      pq.[myPosition] <- pq.[positionSon1]
+                      myPosition <- positionSon1
+                      positionSon1 <- getSon1 myPosition
+                      positionSon2 <- getSon2 myPosition
+              else keepGoing <- false
+          else keepGoing <- false
       pq.[myPosition] <- kv
 
   //---------------------------------------------
@@ -92,5 +97,5 @@ module MPriorityQueue =
     pq
 
   let toSeq (pq:MutablePriorityQueue<_,_>) = 
-    Seq.init pq.Count (fun i -> popMin pq)
-    //pq |> Seq.map (fun kv -> kv.k, kv.v)
+    //Seq.init pq.Count (fun i -> popMin pq)
+    pq |> Seq.map (fun kv -> kv.k, kv.v)
