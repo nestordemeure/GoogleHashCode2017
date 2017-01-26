@@ -237,3 +237,5 @@ module MPriorityQueue =
 
   let toArray (pq:MutablePriorityQueue<_,_>) = 
     Array.init pq.Count (fun i -> kvToTuple pq.[i])
+
+// TODO add maxPriorityQueue
