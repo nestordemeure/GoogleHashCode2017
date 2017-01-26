@@ -33,4 +33,6 @@ let main argv =
     //export 
     export "../output.txt" [||]
 
+    let t = MinPQ.toSeq
+
     0 // return an integer exit code
