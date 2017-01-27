@@ -5,18 +5,18 @@ open ExtCore.Collections
 open GHC.Extensions
 open GHC.Extensions.Common
 
-/// struct to store a value and its key (cache friendly)
-type HeapEntry<'K,'V> = struct val k:'K val v:'V new(k,v) = {k=k;v=v} end
-
 //-------------------------------------------------------------------------------------------------
 // PRIORITY QUEUE 
 
 [<CompilationRepresentation(CompilationRepresentationFlags.UseNullAsTrueValue)>]
+/// good amortized Min Priority Queue
+/// the price of a deleteMin/popMin can go up to O(n) but it is amortizd into O(ln(n)) other operations are O(1)
 type PairingHeap<'K,'V> =
     | EmptyHeap
     | Heap of HeapEntry<'K,'V> * (PairingHeap<'K,'V> list)
 
-/// Min Priority Queue
+/// good amortized Min Priority Queue
+/// the price of a deleteMin/popMin can go up to O(n) but it is amortizd into O(ln(n)) other operations are O(1)
 [<RequireQualifiedAccess>]
 module PairingHeap =
  
@@ -39,8 +39,8 @@ module PairingHeap =
     | _, EmptyHeap -> pq1
     | Heap(kv1,l1), Heap(kv2,l2) -> if kv1 < kv2 then Heap(kv1, pq2 :: l1) else Heap(kv2, pq1 :: l2)
 
-  /// merge a list of heap using a pairing procedure
-  let mergeList l =
+  /// merge a list of heaps using a pairing procedure
+  let mergeMany l =
     let rec mergeInPairs pairs l =
       match l with 
       | [] -> pairs
@@ -53,7 +53,7 @@ module PairingHeap =
   let deleteMin pq = 
     match pq with 
     | EmptyHeap -> pq 
-    | Heap(_,l) -> mergeList l
+    | Heap(_,l) -> mergeMany l
 
   let peekMin pq =
     match pq with 
@@ -63,10 +63,10 @@ module PairingHeap =
   let popMin pq = 
     match pq with 
     | EmptyHeap -> None 
-    | Heap(kv,l) -> Some( (kv.k,kv.v), mergeList l)
+    | Heap(kv,l) -> Some( (kv.k,kv.v), mergeMany l)
  
-  let fromList l = l |> List.map (fun (k,v) -> singleton k v) |> mergeList
+  let fromList l = l |> List.map (fun (k,v) -> singleton k v) |> mergeMany
 
-  let fromSeq sq = [for (k,v) in sq -> singleton k v] |> mergeList
+  let fromSeq sq = [for (k,v) in sq -> singleton k v] |> mergeMany
   
   let toSeq pq = Seq.unfold popMin pq
