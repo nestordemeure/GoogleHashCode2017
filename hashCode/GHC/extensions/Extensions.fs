@@ -12,6 +12,12 @@ module Common =
     /// unit pipe
     let inline (|->) x f = f x ; x
 
+    /// let timeout = timeoutIn 1000
+    /// if timeout () then (*something*) else (*something else*)
+    let timeoutIn milliseconds =
+        let timer = Diagnostics.Stopwatch.StartNew()
+        fun () -> timer.ElapsedMilliseconds <= milliseconds
+
 //-------------------------------------------------------------------------------------------------
 // ARRAY
 
