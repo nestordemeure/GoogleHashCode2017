@@ -28,5 +28,76 @@ module Array =
       a.[i] <- a.[j]
       a.[j] <- temp
 
+   /// test if any element of the array satisfy the given predicate
+   let existsi predicate (a : 'T array) =
+      let mutable i = 0
+      while i < a.Length && not (predicate i a.[i]) do 
+         i <- i+1
+      i = a.Length
+
+   /// returns the index of the smallest element in the array
+   let minIndex (a : 'T array) = 
+      let mutable result = a.[0]
+      let mutable resultIndex = 0
+      for i = 1 to a.Length - 1 do 
+         if a.[i] < result then 
+            result <- a.[i]
+            resultIndex <- i 
+      resultIndex
+
+   /// returns the index of the biggest element in the array
+   let maxIndex (a : 'T array) = 
+      let mutable result = a.[0]
+      let mutable resultIndex = 0
+      for i = 1 to a.Length - 1 do 
+         if a.[i] > result then 
+            result <- a.[i]
+            resultIndex <- i 
+      resultIndex
+
+   /// returns the index of the smallest element in the array according to a given projection
+   let minByIndex projection (a : 'T array) = 
+      let mutable result = projection a.[0]
+      let mutable resultIndex = 0
+      for i = 1 to a.Length - 1 do 
+         let pi = projection a.[i]
+         if pi < result then 
+            result <- pi
+            resultIndex <- i 
+      resultIndex
+
+   /// returns the index of the biggest element in the array according to a given projection
+   let maxByIndex projection (a : 'T array) = 
+      let mutable result = projection a.[0]
+      let mutable resultIndex = 0
+      for i = 1 to a.Length - 1 do 
+         let pi = projection a.[i]
+         if pi > result then 
+            result <- pi
+            resultIndex <- i 
+      resultIndex
+
+   /// returns the smallest element in the array according to a given projection
+   let minByi projection (a : 'T array) = 
+      let mutable result = projection 0 a.[0]
+      let mutable resultIndex = 0
+      for i = 1 to a.Length - 1 do 
+         let pi = projection i a.[i]
+         if pi < result then 
+            result <- pi
+            resultIndex <- i 
+      a.[resultIndex]
+
+   /// returns the smallest element in the array according to a given projection
+   let maxByi projection (a : 'T array) = 
+      let mutable result = projection 0 a.[0]
+      let mutable resultIndex = 0
+      for i = 1 to a.Length - 1 do 
+         let pi = projection i a.[i]
+         if pi > result then 
+            result <- pi
+            resultIndex <- i 
+      a.[resultIndex]
+
 //-------------------------------------------------------------------------------------------------
 
