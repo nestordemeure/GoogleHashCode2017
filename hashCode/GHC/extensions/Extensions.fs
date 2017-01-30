@@ -100,4 +100,19 @@ module Array =
       a.[resultIndex]
 
 //-------------------------------------------------------------------------------------------------
+// LIST
 
+module List =
+   /// change only the first element to satisfy the predicate
+   let rec singleMap predicate mapping l =
+      match l with 
+      | [] -> l
+      | t::q when predicate t -> (mapping t) :: q
+      | t::q -> t :: (singleMap predicate mapping q)
+
+   /// replace the first occurence of an element with a given new value
+   let rec replace oldx newx l =
+      match l with 
+      | [] -> l
+      | x::q when x = oldx -> newx :: q
+      | x::q -> x :: (replace oldx newx q)
