@@ -48,18 +48,17 @@ let getListEndpoints cache endpoints =
 let isSameVideo v1 v2 =
     (v1.idv = v2.idv)
 
+let rec selectionneBests tailleMax result cache =
+  match cache with
+  | [] -> result
+  | p::q when p.poid > tailleMax -> selectionneBests tailleMax result q
+  | p::q -> selectionneBests (tailleMax-p.poid) (p::result) q
+
+let filterCaches caches tailleMax =
+  Array.mapInPlace (selectionneBests tailleMax []) caches
+  caches
+
 let computeCache (videos, points, cacheNum, cacheSize) =
     let caches = fillCache cacheNum points
     fuseCache caches
-
-
-let rec selectionneBests tailleMax result cache =
-    match cache with
-    | [] -> result
-    | p::q when p.poid > tailleMax -> selectionneBests tailleMax result q
-    | p::q -> selectionneBests (tailleMax-p.poid) (p::result) q
-
-let filterCaches caches tailleMax = 
-    Array.mapInPlace (selectionneBests tailleMax []) caches 
-    caches
-
+    filterCaches caches cacheSize
