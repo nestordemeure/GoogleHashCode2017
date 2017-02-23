@@ -14,9 +14,19 @@ let listToString sep (l : string list) =
     | [] -> ""
     | _ -> List.reduce (fun acc s -> acc + sep + s ) l
 
+let rec ConvertToString list =
+   match list with
+   | [l] -> l.ToString()
+   | head :: tail -> head.ToString() + " " + ConvertToString tail
+   | [] -> ""
+
 //-------------------------------------------------------------------------------------------------
 // EXPORTATION
 
-let export path lines =
+let export path caches =
    //File.WriteAllText(path, text)
-   File.WriteAllLines(path, lines)
+   let cacheNumber = Seq.length caches |> string
+   let lines = 
+    caches
+    |> List.map (fun c -> sprintf "%d %s" (c.idC) (ConvertToString c.video))
+   File.WriteAllLines(path, cacheNumber :: lines)
