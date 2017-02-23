@@ -26,9 +26,9 @@ let main argv =
     let inPaths = ["example";"small";"medium";"big"]
     for inPath in inPaths do
        printfn "%s" inPath
-       let videos, points, requests, cacheNum, cacheSize = import (sprintf "../inputs/%s.in" inPath)
+       let videos, points, cacheNum, cacheSize = import (sprintf "../inputs/%s.in" inPath)
        // solution
-       let sol = solution (videos, points, requests, cacheNum, cacheSize)
+       let sol = solution (videos, points, cacheNum, cacheSize)
        // evaluation
        (*
        evaluation r

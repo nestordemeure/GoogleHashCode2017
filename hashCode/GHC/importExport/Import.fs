@@ -36,12 +36,9 @@ let import path =
                index <- index+1
             yield point
       |]
-   let requests =
-      [|
-         for r = 0 to requestNum-1 do
-            let vidId,pointId,reqNum = sscanf "%d %d %d" text.[index]
-            let request = {video = vidId; point=pointId; value=reqNum}
-            yield request
-            index <- index+1
-      |]
-   videos, points, requests, cacheNum, cacheSize
+   for r = 0 to requestNum-1 do
+      let vidId,pointId,reqNum = sscanf "%d %d %d" text.[index]
+      let request = {video = vidId; value=reqNum}
+      points.[pointId] <- {points.[pointId] with reqs = request :: points.[pointId].reqs}
+      index <- index+1
+   videos, points, cacheNum, cacheSize
