@@ -17,6 +17,8 @@ type Point = {idP : int ; latency : int ; caches : int array ; reqs : Request li
 
 let createPoint id latency cacheNum = { idP = id ; latency = latency ; caches = Array.create cacheNum -1 ; reqs = [] } 
 
+type Cache = { idC : int ; video : int list }
+
 //-------------------------------------------------------------------------------------------------
 
 
