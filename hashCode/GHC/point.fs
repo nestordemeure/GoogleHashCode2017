@@ -8,7 +8,11 @@ open GHC.Domain
 
 //-------------------------------------------------------------------------------------------------
 
-let setPoids points videos = ()
+let setPoids points videos = 
+    for p in points do 
+        for r in p.reqs do
+            r.score <- videos[r.video].size
+    
 
 //-------------------------------------------------------------------------------------------------
 
