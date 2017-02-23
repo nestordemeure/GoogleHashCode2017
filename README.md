@@ -1,2 +1,2 @@
-# Google Hash Code 2017 : trial round
+# Google Hash Code 2017 : Qualification round
 
