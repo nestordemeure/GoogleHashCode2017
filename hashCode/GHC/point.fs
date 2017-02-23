@@ -32,7 +32,7 @@ let computeScoreReq req =
    let poid = float req.poid
    let valeur = float req.value
    //{req with score = poid / valeur}
-   {req with score = valeur / poid }
+   {req with score = valeur/poid }
 
 let computeScore (point:Point) = 
    
