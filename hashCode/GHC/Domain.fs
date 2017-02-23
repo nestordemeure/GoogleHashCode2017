@@ -11,14 +11,13 @@ open GHC.Extensions.Common
 //type graph = Dictionary<'key,'Node>
 type Video = {idv : int ; size : int}
 
-type Request = { video : int ; value : int ; mutable poid : int ; score : float }
+
+type Request = { video : int ; value : int ; poid : int ; score : float ; lat : int}
 
 type Point = {idP : int ; latency : int ; caches : int array ; reqs : Request list}
 
-let createPoint id latency cacheNum = { idP = id ; latency = latency ; caches = Array.create cacheNum -1 ; reqs = [] } 
+let createPoint id latency cacheNum = { idP = id ; latency = latency ; caches = Array.create cacheNum -1 ; reqs = [] }
 
 type Cache = { idC : int ; video : int list }
 
 //-------------------------------------------------------------------------------------------------
-
-

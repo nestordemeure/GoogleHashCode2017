@@ -26,12 +26,12 @@ let import path =
    let mutable index = 2
    let points =
       [|
-         for p = 0 to pointNum-1 do 
+         for p = 0 to pointNum-1 do
             let data = Array.map int (text.[index].Split(' '))
             let latency,localCacheNum = data.[0], data.[1]
             let point =  createPoint p latency cacheNum
             index <- index+1
-            for c = 1 to localCacheNum do 
+            for c = 1 to localCacheNum do
                let data2 = Array.map int (text.[index].Split(' '))
                let (idcache,latencyCache) = data2.[0], data2.[1]
                point.caches.[idcache] <- latencyCache
@@ -40,7 +40,8 @@ let import path =
       |]
    for r = 0 to requestNum-1 do
       let vidId,pointId,reqNum = sscanf "%d %d %d" text.[index]
-      let request = {video = vidId; value=reqNum ; poid = 0 ; score = 0.}
+      let request = {video = vidId; value=reqNum ; poid = -1 ; score = -1 ; lat = -1}
+
       points.[pointId] <- {points.[pointId] with reqs = request :: points.[pointId].reqs}
       index <- index+1
    videos, points, cacheNum, cacheSize
