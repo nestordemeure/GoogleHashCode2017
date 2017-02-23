@@ -54,9 +54,42 @@ let rec selectionneBests tailleMax result cache =
   | p::q when p.poid > tailleMax -> selectionneBests tailleMax result q
   | p::q -> selectionneBests (tailleMax-p.poid) (p::result) q
 
+//-------------------------------------------------------------------------------------------------
+
+let rec consumme poid l = 
+   match l with 
+   | t::q when t.poid > poid -> consumme poid q 
+   | _ -> l
+
 let filterCaches caches tailleMax =
-  Array.mapInPlace (selectionneBests tailleMax []) caches
-  caches
+   let cacheNum = Array.length caches
+   let result = Array.create cacheNum []
+   let poids = Array.create cacheNum tailleMax
+   let mutable notFinished = true
+   while notFinished do
+      notFinished <- false
+      let mutable bestInd = -1
+      let mutable bestScore = -1.
+      for i = 0 to cacheNum-1 do 
+         match caches.[i] with 
+         | req::q when req.score < bestScore -> 
+            bestScore <- req.score
+            bestInd <- i
+            notFinished <- true
+         | _ -> ()
+      
+      if bestInd >= 0 then 
+         match caches.[bestInd] with 
+         | [] -> notFinished <- true
+         | t::q -> 
+            result.[bestInd] <- t :: result.[bestInd]
+            poids.[bestInd] <- poids.[bestInd] - t.poid
+            caches.[bestInd] <- consumme poids.[bestInd] q
+   result
+   //Array.mapInPlace (selectionneBests tailleMax []) caches
+   //caches
+
+//-------------------------------------------------------------------------------------------------
 
 let computeCache (videos, points, cacheNum, cacheSize) =
     let caches = fillCache cacheNum points
