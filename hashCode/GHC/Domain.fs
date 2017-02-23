@@ -12,7 +12,7 @@ open GHC.Extensions.Common
 type Video = {idv : int ; size : int}
 
 
-type Request = { video : int ; value : int ; poid : int ; score : float ; lat : int}
+type Request = { video : int ; value : int ; mutable poid : int ; score : float ; lat : int}
 
 type Point = {idP : int ; latency : int ; caches : int array ; reqs : Request list}
 
