@@ -32,4 +32,4 @@ else
   mono packages/FAKE/tools/FAKE.exe $@ --fsiargs -d:MONO build.fsx
 fi
 
-zip -r -q outputs/source.zip hashCode/GHC
+zip -r -q outputs/sources.zip hashCode/GHC
