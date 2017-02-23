@@ -25,8 +25,8 @@ let collapseScoreReqs vidId reqList =
    | t::q ->
       let sum acc r =
          let lat = (float r.lat) + 1.
-         {acc with score = acc.score + r.score*lat}
-      List.fold sum {t with score = t.score*(float t.lat)+t.score} q
+         {acc with score = acc.score + r.score/lat}
+      List.fold sum {t with score = t.score/(float t.lat)+t.score} q
 
 let fuseReqsList (reqs: Request list) =
    reqs
