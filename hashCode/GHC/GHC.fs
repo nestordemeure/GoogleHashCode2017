@@ -23,7 +23,7 @@ let evaluation solution = ()
 [<EntryPoint>]
 let main argv =
     // import
-    let inPaths = ["kittens";"me_at_the_zoo";"placeholder";"trending_today";"videos_worth_spreading"]
+    let inPaths = ["kittens";"me_at_the_zoo";"trending_today";"videos_worth_spreading"]
     for inPath in inPaths do
        printfn "%s" inPath
        let videos, points, cacheNum, cacheSize = import (sprintf "../inputs/%s.in" inPath)
