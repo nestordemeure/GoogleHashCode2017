@@ -6,7 +6,7 @@ lib/release
 Debug
 *.suo
 *.user
-outputs/source.zip
+outputs/sources.zip
 *.txt
 obj
 bin
