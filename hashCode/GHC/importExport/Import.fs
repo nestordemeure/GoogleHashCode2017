@@ -24,7 +24,6 @@ let import path =
       text.[1].Split(' ')
       |> Array.mapi (fun i s -> {idv=i;size=int s})
    let mutable index = 2
-   printfn "1"
    let points =
       [|
          for p = 0 to pointNum-1 do 
@@ -37,7 +36,6 @@ let import path =
                index <- index+1
             yield point
       |]
-   printfn "2"
    for r = 0 to requestNum-1 do
       let vidId,pointId,reqNum = sscanf "%d %d %d" text.[index]
       let request = {video = vidId; value=reqNum}

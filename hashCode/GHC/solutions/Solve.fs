@@ -15,4 +15,5 @@ open GHC.Domain
 
 /// solution
 let solution (videos, points, cacheNum, cacheSize) = 
-   [||]
+   computePoints (videos, points, cacheNum, cacheSize)
+   computeCache (videos, points, cacheNum, cacheSize)
