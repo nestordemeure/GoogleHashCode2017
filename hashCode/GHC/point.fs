@@ -28,9 +28,12 @@ let fuseReqs (point:Point) =
 
 //-------------------------------------------------------------------------------------------------
 
+let computeScoreReq req = 
+   req
+
 let computeScore (point:Point) = 
    
-   point
+   { point with reqs = List.map computeScoreReq point.reqs }
 
 //-------------------------------------------------------------------------------------------------
 
