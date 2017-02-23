@@ -6,6 +6,9 @@ open GHC.Extensions
 open GHC.Extensions.Common
 open GHC.Domain
 
+open GHC.Cache
+open GHC.Point
+
 //-------------------------------------------------------------------------------------------------
 
 
