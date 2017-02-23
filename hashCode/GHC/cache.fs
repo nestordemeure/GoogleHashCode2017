@@ -66,7 +66,7 @@ let reserve caches t =
       match l with 
       | [] -> l 
       | x::q when x.idR = t.idR -> q 
-      | x::q -> remove q
+      | x::q -> x :: (remove q)
    Array.mapInPlace remove caches
 
 let filterCaches caches tailleMax =
