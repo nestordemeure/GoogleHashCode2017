@@ -52,7 +52,6 @@ let computeCache (videos, points, cacheNum, cacheSize) =
     let caches = fillCache cacheNum points
     fuseCache caches
 
-  
 
 let rec selectionneBests tailleMax result cache =
     match cache with
@@ -63,3 +62,4 @@ let rec selectionneBests tailleMax result cache =
 let filterCaches caches tailleMax = 
     Array.mapInPlace (selectionneBests tailleMax []) caches 
     caches
+
