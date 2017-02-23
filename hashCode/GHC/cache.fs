@@ -61,6 +61,14 @@ let rec consumme poid l =
    | t::q when t.poid > poid -> consumme poid q 
    | _ -> l
 
+let reserve caches t =
+   let rec remove l =
+      match l with 
+      | [] -> l 
+      | x::q when x.idR = t.idR -> q 
+      | x::q -> x :: (remove q)
+   Array.mapInPlace remove caches
+
 let filterCaches caches tailleMax =
    let cacheNum = Array.length caches
    let result = Array.create cacheNum []
@@ -85,9 +93,9 @@ let filterCaches caches tailleMax =
             result.[bestInd] <- t :: result.[bestInd]
             poids.[bestInd] <- poids.[bestInd] - t.poid
             caches.[bestInd] <- consumme poids.[bestInd] q
+            reserve caches t
    result
-   //Array.mapInPlace (selectionneBests tailleMax []) caches
-   //caches
+
 
 //-------------------------------------------------------------------------------------------------
 

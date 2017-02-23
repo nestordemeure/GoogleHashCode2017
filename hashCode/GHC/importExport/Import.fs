@@ -40,7 +40,7 @@ let import path =
       |]
    for r = 0 to requestNum-1 do
       let vidId,pointId,reqNum = sscanf "%d %d %d" text.[index]
-      let request = {video = vidId; value=reqNum ; poid = -1 ; score = -1. ; lat = -1}
+      let request = {idR = r ; video = vidId; value=reqNum ; poid = -1 ; score = -1. ; lat = -1}
 
       points.[pointId] <- {points.[pointId] with reqs = request :: points.[pointId].reqs}
       index <- index+1
