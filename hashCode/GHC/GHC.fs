@@ -22,18 +22,17 @@ let evaluation solution = ()
 
 [<EntryPoint>]
 let main argv =
-(*
-    //printfn "%A" argv
     // import
-    let inPath = "../input.in"
-    let r = import inPath
-    // solution
-
-    // evaluation
-    evaluation r
-    printfn "score : %d" score
-    //export 
-    export "../output.txt" [||]
-*)
-
+    let inPaths = ["example";"small";"medium";"big"]
+    for inPath in inPaths do
+       printfn "%s" inPath
+       let r = import (sprintf "../inputs/%s.in" inPath)
+       // solution
+       let sol = solution r
+       // evaluation
+       evaluation r
+       printfn "score : %d" score
+       score <- 0
+       //export 
+       export (sprintf "../outputs/%sOut.txt" inPath) sol
     0 // return an integer exit code
