@@ -51,3 +51,4 @@ let isSameVideo v1 v2 =
 let computeCache (videos, points, cacheNum, cacheSize) =
     let caches = fillCache cacheNum points
     fuseCache caches
+    Array.mapInPlace (List.sortBy (fun r -> r.score)) caches
