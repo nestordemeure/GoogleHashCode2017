@@ -92,7 +92,7 @@ let filterCaches caches tailleMax =
             result.[bestInd] <- t :: result.[bestInd]
             poids.[bestInd] <- poids.[bestInd] - t.poid
             caches.[bestInd] <- consumme poids.[bestInd] q
-            reserve caches poids t
+            //reserve caches poids t
    result
 
 
