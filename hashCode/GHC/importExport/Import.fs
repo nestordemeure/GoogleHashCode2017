@@ -27,11 +27,13 @@ let import path =
    let points =
       [|
          for p = 0 to pointNum-1 do 
-            let (latency,localCacheNum) = sscanf "%d %d" text.[index]
+            let data = Array.map int (text.[index].Split(' '))
+            let latency,localCacheNum = data.[0], data.[1]
             let point =  createPoint p latency cacheNum
             index <- index+1
             for c = 1 to localCacheNum do 
-               let (idcache,latencyCache) = sscanf "%d %d" text.[index]
+               let data2 = Array.map int (text.[index].Split(' '))
+               let (idcache,latencyCache) = data2.[0], data2.[1]
                point.caches.[idcache] <- latencyCache
                index <- index+1
             yield point
