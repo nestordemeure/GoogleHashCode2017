@@ -16,3 +16,5 @@ let getListEndpoints cache endpoints =
             MutableSet.add i epSet
     epSet
 
+let isSameVideo v1 v2 =
+    return (v1.idv == v2.idv)
