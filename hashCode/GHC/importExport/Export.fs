@@ -14,19 +14,19 @@ let listToString sep (l : string list) =
     | [] -> ""
     | _ -> List.reduce (fun acc s -> acc + sep + s ) l
 
-let rec ConvertToString list =
-   match list with
-   | [l] -> l.ToString()
-   | head :: tail -> head.ToString() + " " + ConvertToString tail
-   | [] -> ""
-
 //-------------------------------------------------------------------------------------------------
 // EXPORTATION
 
-let export path caches =
-   //File.WriteAllText(path, text)
-   let cacheNumber = Seq.length caches |> string
+let printReqList (cache, reqList) = 
+   sprintf "%d %s" cache (listToString " " reqList)
+
+let export path (caches:(Request list)[]) =
+   let cacheNumber = Array.sumBy (fun rl -> if List.isEmpty rl then 0 else 1) caches |> string
    let lines = 
-    caches
-    |> List.map (fun c -> sprintf "%d %s" (c.idC) (ConvertToString c.video))
+      caches
+      |> Array.map ( List.map (fun r -> r.video |> string) )
+      |> Array.indexed
+      |> Array.filter (fun (i,l) -> l <> [])
+      |> Array.map printReqList
+      |> List.ofArray
    File.WriteAllLines(path, cacheNumber :: lines)
