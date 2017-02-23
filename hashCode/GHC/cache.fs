@@ -72,7 +72,7 @@ let filterCaches caches tailleMax =
       let mutable bestScore = -1.
       for i = 0 to cacheNum-1 do 
          match caches.[i] with 
-         | req::q when req.score < bestScore -> 
+         | req::q when req.score > bestScore -> 
             bestScore <- req.score
             bestInd <- i
             notFinished <- true
@@ -94,5 +94,5 @@ let filterCaches caches tailleMax =
 let computeCache (videos, points, cacheNum, cacheSize) =
     let caches = fillCache cacheNum points
     fuseCache caches
-    Array.mapInPlace (List.sortBy (fun r -> r.score)) caches
+    Array.mapInPlace (List.sortByDescending (fun r -> r.score)) caches
     filterCaches caches cacheSize
