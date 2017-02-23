@@ -94,4 +94,5 @@ let filterCaches caches tailleMax =
 let computeCache (videos, points, cacheNum, cacheSize) =
     let caches = fillCache cacheNum points
     fuseCache caches
+    Array.mapInPlace (List.sortBy (fun r -> r.score)) caches
     filterCaches caches cacheSize
