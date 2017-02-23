@@ -32,7 +32,6 @@ let computeScoreReq latCenter (latCaches:int[]) req =
    let poid = float req.poid
    let valeur = float req.value
    let score = poid / valeur
-
    {req with score = score}
 
 let computeScore (point:Point) = 
