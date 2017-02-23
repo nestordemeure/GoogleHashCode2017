@@ -73,6 +73,7 @@ let filterCaches caches tailleMax =
    let cacheNum = Array.length caches
    let result = Array.create cacheNum []
    let poids = Array.create cacheNum tailleMax
+   Array.mapiInPlace (fun i l -> consumme poids.[i] l) result
    let mutable notFinished = true
    while notFinished do
       notFinished <- false
