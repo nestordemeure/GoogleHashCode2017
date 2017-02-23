@@ -8,10 +8,10 @@ open GHC.Domain
 
 //-------------------------------------------------------------------------------------------------
 
-let setPoids points videos = 
+let setPoids points (videos:Video[]) = 
     for p in points do 
         for r in p.reqs do
-            r.poid <- videos[r.video].size
+            r.poid <- videos.[r.video].size
     
 
 //-------------------------------------------------------------------------------------------------
@@ -28,22 +28,26 @@ let fuseReqs (point:Point) =
 
 //-------------------------------------------------------------------------------------------------
 
-let computeScoreReq latCenter (latCaches:int[]) req = 
+let computeScoreReq req = 
    let poid = float req.poid
    let valeur = float req.value
-   let score = poid / valeur
-
-   {req with score = score}
+   {req with score = poid / valeur}
 
 let computeScore (point:Point) = 
    
-   { point with reqs = List.map (computeScoreReq point.latency point.caches) point.reqs }
+   { point with reqs = List.map computeScoreReq point.reqs }
+
+//-------------------------------------------------------------------------------------------------
+let correctLatence point =
+   Array.mapInPlace (fun l -> if l < 0 then l else point.latency - l ) point.caches
 
 //-------------------------------------------------------------------------------------------------
 
 let computePoints (videos, points, cacheNum, cacheSize) = 
    // mettre les poids dans les requetes
    setPoids points videos
+   // latence corigées
+   Array.iter correctLatence points
    // fusionner les requetes par video
    Array.mapInPlace fuseReqs points
    // calculer un score pour chaque requette

@@ -11,7 +11,7 @@ open GHC.Extensions.Common
 //type graph = Dictionary<'key,'Node>
 type Video = {idv : int ; size : int}
 
-type Request = { video : int ; value : int ; mutable poid : int ; mutable score : float }
+type Request = { video : int ; value : int ; mutable poid : int ; score : float }
 
 type Point = {idP : int ; latency : int ; caches : int array ; reqs : Request list}
 
