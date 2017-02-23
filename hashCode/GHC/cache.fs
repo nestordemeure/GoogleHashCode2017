@@ -58,7 +58,7 @@ let rec selectionneBests tailleMax result cache =
 
 let rec consumme poid l = 
    match l with 
-   | t::q when t.poid > poid -> consumme poid q 
+   | t::q when t.poid >= poid -> consumme poid q 
    | _ -> l
 
 let reserve caches t =
@@ -73,7 +73,6 @@ let filterCaches caches tailleMax =
    let cacheNum = Array.length caches
    let result = Array.create cacheNum []
    let poids = Array.create cacheNum tailleMax
-   Array.mapiInPlace (fun i l -> consumme poids.[i] l) result
    let mutable notFinished = true
    while notFinished do
       notFinished <- false
