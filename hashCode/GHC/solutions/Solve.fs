@@ -14,5 +14,5 @@ open GHC.Domain
 // SOLUTION
 
 /// solution
-let solution data = 
+let solution (videos, points, requests, cacheNum, cacheSize) = 
    [||]
