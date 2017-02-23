@@ -29,6 +29,7 @@ let fuseReqs (point:Point) =
 //-------------------------------------------------------------------------------------------------
 
 let computeScoreReq latCenter (latCaches:int[]) req = 
+   let latences = Array.map (fun l -> ) latCaches
    let poid = float req.poid
    let valeur = float req.value
    let score = poid / valeur
