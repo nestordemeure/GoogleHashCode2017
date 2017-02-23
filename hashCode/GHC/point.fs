@@ -11,7 +11,7 @@ open GHC.Domain
 let setPoids points videos = 
     for p in points do 
         for r in p.reqs do
-            r.score <- videos[r.video].size
+            r.poid <- videos[r.video].size
     
 
 //-------------------------------------------------------------------------------------------------
