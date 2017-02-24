@@ -1,4 +1,4 @@
-# Google Hash Code 2017 : Qualification round
+# Google Hash Code 2017
 
 Team : **HTAG**  
 Hub : **Université de Strasbourg**  
