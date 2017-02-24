@@ -19,5 +19,5 @@ Our team had the following members:
 
 ---
 
-A couple of teachers made a team (*Bibeleskaes*) in our hub and arrived 9th world-wide and first in France.
+Two teachers made a team (*Bibeleskaes*) in our hub and arrived 9th world-wide and first in France.
 
